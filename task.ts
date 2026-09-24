@@ -94,3 +94,14 @@ const updateRequiredUser: requiredUser = {
     role: "admin",
     permissions: ["user:execute"]
 }
+
+type readonlyUser = Readonly<User>;
+
+const userKamil: readonlyUser = {
+    id: 1,
+    name: 'Kamil',
+    role: 'user'
+}
+
+console.log(userKamil);
+
