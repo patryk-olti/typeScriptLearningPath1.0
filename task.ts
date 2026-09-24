@@ -77,3 +77,20 @@ function getName(data: unknown): string {
 console.log(isAdmin(userAnna));
 
 console.log(getName(userJan));
+
+// --------------------------- //
+
+type partialUser = Partial<Admin>;
+
+const updatePartialName: partialUser = {
+    name: "test 123"
+}
+
+type requiredUser = Required<Admin>;
+
+const updateRequiredUser: requiredUser = {
+    name: "Michał",
+    id: 2,
+    role: "admin",
+    permissions: ["user:execute"]
+}
