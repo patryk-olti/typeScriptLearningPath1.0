@@ -1,11 +1,19 @@
 import { createServer } from "node:http";
 
 const server = createServer((req, res) => {
-    res.writeHead(200, {
-        "Content-Type": "text/plain",
-    });
+    if(req.url === "/"){
+        res.end("Hello from backend!");
+    }else if(req.url === "/users" && req.method === "GET"){
+        res.writeHead(200);
+        res.end("Users endpoint");
+    }else if(req.url === "/about"){
+        res.end("About endpoint");
+    }else{
+        res.writeHead(404);
+        res.end("not found!");
+    }
 
-    res.end("Hello from backend!");
 });
+
 
 server.listen(3000);
