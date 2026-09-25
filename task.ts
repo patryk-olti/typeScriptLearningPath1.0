@@ -74,9 +74,9 @@ function getName(data: unknown): string {
     return data.name;
 }
 
-console.log(isAdmin(userAnna));
+//console.log(isAdmin(userAnna));
 
-console.log(getName(userJan));
+//console.log(getName(userJan));
 
 // --------------------------- //
 
@@ -152,3 +152,15 @@ const x = { id: 1 };
 const y = { name: "Jan" };
 const z = { id: 1, name: "Jan" };
 
+// ----------- NARROWING -------- //
+
+function printValue( value: string | number ){
+    if(typeof(value) === "string"){
+        console.log(value.toUpperCase());
+    }else{
+        console.log(`NUMBER: ${value}`)
+    }
+}
+
+printValue("hello");
+printValue(42);
