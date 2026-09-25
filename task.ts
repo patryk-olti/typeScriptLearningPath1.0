@@ -111,6 +111,26 @@ function identity<T>(value: T): T{
     return value;
 }
 
-console.log(identity(1));
-console.log(identity("elo elo"));
-console.log(identity(["jeden", "dwa", "trzy"]));
+function first<T>(items: T[]): T | undefined{
+    
+    return items[0];
+}
+
+console.log(first([1, 2, 3]));
+console.log(first(["a", "b", "c"]));
+console.log(first([]));
+
+
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+    return obj[key];
+}
+
+const user = {
+    id: 10,
+    name: "Jan",
+    age: 25
+};
+
+console.log(typeof(getProperty(user, "name")));
+console.log(typeof(getProperty(user, "age")));
+console.log(typeof(getProperty(user, "id")));
