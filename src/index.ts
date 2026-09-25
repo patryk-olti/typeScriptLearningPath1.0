@@ -1,6 +1,8 @@
 import { createServer } from "node:http";
 import type { User } from './types/User.js';
 
+let users: User[] = [];
+
 function checkUser(value: User | undefined): value is User{
     if( (typeof(value) !== "object") || (typeof(value) === "undefined") ){ return false; }
 
@@ -24,7 +26,7 @@ const server = createServer((req, res) => {
     }else if(req.url === "/users" && req.method === "GET"){
 
         res.writeHead(200);
-        res.end("List of users");
+        res.end(`List of users: ${JSON.stringify(users)}`);
     
     }else if(req.url === "/users" && req.method === "POST"){
 
@@ -35,16 +37,24 @@ const server = createServer((req, res) => {
         })
 
         req.on("end", () => {
-            const data = JSON.parse(body);
+            try{
+                const data = JSON.parse(body);
 
-            if(checkUser(data)){
-                res.writeHead(201);
-                res.end(`User created: ${JSON.stringify(data)}`);
-            }else{
+                if(checkUser(data)){
+                    users.push(data);
+
+                    res.writeHead(201);
+                    res.end(`User created: ${JSON.stringify(data)}\n actual array of users: ${JSON.stringify(users)}`);
+                }else{
+                    res.writeHead(400);
+                    res.end(`Bad input!`);
+                }
+
+            }catch(error){
+                console.error(error);
                 res.writeHead(400);
-                res.end(`Bad input!`);
+                res.end("Invalid JSON");
             }
-            
         })
 
     }else if(req.url === "/about"){
