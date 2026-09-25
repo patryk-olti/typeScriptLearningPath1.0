@@ -1,5 +1,6 @@
 import { createServer } from "node:http";
 import type { User } from './types/User.js';
+import { getUsers } from './controller/User.js';
 
 let users: User[] = [];
 
@@ -17,7 +18,7 @@ function checkUser(value: User | undefined): value is User{
     return true;
 }
 
-const server = createServer((req, res) => {
+const server = createServer(async (req, res) => {
     if(req.url === "/"){
 
         res.writeHead(200);
@@ -25,8 +26,12 @@ const server = createServer((req, res) => {
     
     }else if(req.url === "/users" && req.method === "GET"){
 
+        const data = await getUsers();
+
+        console.log(data);
+
         res.writeHead(200);
-        res.end(`List of users: ${JSON.stringify(users)}`);
+        res.end(`List of users: ${JSON.stringify(data)}`);
     
     }else if(req.url === "/users" && req.method === "POST"){
 
