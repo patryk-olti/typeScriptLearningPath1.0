@@ -105,3 +105,12 @@ const userKamil: readonlyUser = {
 
 console.log(userKamil);
 
+// ---------------------------- //
+
+function identity<T>(value: T): T{
+    return value;
+}
+
+console.log(identity(1));
+console.log(identity("elo elo"));
+console.log(identity(["jeden", "dwa", "trzy"]));
