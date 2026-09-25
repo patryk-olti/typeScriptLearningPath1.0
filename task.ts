@@ -103,7 +103,7 @@ const userKamil: readonlyUser = {
     role: 'user'
 }
 
-console.log(userKamil);
+//console.log(userKamil);
 
 // ---------------------------- //
 
@@ -116,9 +116,9 @@ function first<T>(items: T[]): T | undefined{
     return items[0];
 }
 
-console.log(first([1, 2, 3]));
-console.log(first(["a", "b", "c"]));
-console.log(first([]));
+//console.log(first([1, 2, 3]));
+//console.log(first(["a", "b", "c"]));
+//console.log(first([]));
 
 
 function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
@@ -131,6 +131,24 @@ const user = {
     age: 25
 };
 
-console.log(typeof(getProperty(user, "name")));
-console.log(typeof(getProperty(user, "age")));
-console.log(typeof(getProperty(user, "id")));
+//console.log(typeof(getProperty(user, "name")));
+//console.log(typeof(getProperty(user, "age")));
+//console.log(typeof(getProperty(user, "id")));
+
+// ------------------------------ // 
+// Intersections (&)
+type A = {
+    id: number;
+};
+
+type B = {
+    name: string;
+};
+
+type C = A | B;
+type D = A & B;
+
+const x = { id: 1 };
+const y = { name: "Jan" };
+const z = { id: 1, name: "Jan" };
+
