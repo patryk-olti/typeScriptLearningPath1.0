@@ -2,7 +2,20 @@ import { createServer } from "node:http";
 import type { User } from './types/User.js';
 import { getUsers } from './controller/User.js';
 
+import pool from '../db.js';
+
 let users: User[] = [];
+
+async function testConnection() {
+  try {
+    const res = await pool.query('SELECT NOW()');
+    console.log('Połączono z bazą:', res.rows[0]);
+  } catch (err) {
+    console.error('Błąd połączenia:', err);
+  }
+}
+
+testConnection();
 
 function checkUser(value: User | undefined): value is User{
     if( (typeof(value) !== "object") || (typeof(value) === "undefined") ){ return false; }
@@ -25,14 +38,15 @@ const server = createServer(async (req, res) => {
         res.end("Hello from backend!");
     
     }else if(req.url === "/users" && req.method === "GET"){
-
-        const data = await getUsers();
-
-        console.log(data);
-
-        res.writeHead(200);
-        res.end(`List of users: ${JSON.stringify(data)}`);
-    
+        try {
+            const data = await getUsers();
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify(data));
+        } catch (err) {
+            console.error(err);
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "Nie udało się pobrać użytkowników" }));
+        }
     }else if(req.url === "/users" && req.method === "POST"){
 
         let body = "";
@@ -74,4 +88,8 @@ const server = createServer(async (req, res) => {
 });
 
 
-server.listen(3000);
+const PORT = Number(process.env.PORT) || 3001;
+
+server.listen(PORT, () => {
+    console.log(`Server: http://localhost:${PORT}`);
+});

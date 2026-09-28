@@ -1,15 +1,7 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import pool from '../../db.js';
+import type { User } from '../types/User.js';
 
-export function getUsers(): Promise<string> {
-    return new Promise((resolve, reject) => {
-        fs.readFile("./users.json", "utf-8", (err, data) => {
-            if (err) {
-                reject(err);
-                return;
-            }
-
-            resolve(JSON.parse(data));
-        });
-    });
+export async function getUsers(): Promise<User[]> {
+  const result = await pool.query<User>('SELECT id, name, age FROM users');
+  return result.rows;
 }
