@@ -1,8 +1,9 @@
 import { createServer } from "node:http";
 import type { User } from './types/User.js';
-import { getUsers } from './controller/User.js';
+import { getUsers, getUserByEMail } from './controller/User.js';
 
 import pool from '../db.js';
+import { url } from "node:inspector";
 
 let users: User[] = [];
 
@@ -75,6 +76,20 @@ const server = createServer(async (req, res) => {
                 res.end("Invalid JSON");
             }
         })
+
+    }else if(req.url === '/user' && req.method === "GET"){
+        
+        const data = await getUserByEMail('jan.kowalski@example.com');
+        res.writeHead(200);
+        res.end(JSON.stringify(data))
+
+    }else if(req.url?.startsWith('/user') && req.method === "GET"){
+
+        const url = new URL(req.url, `http://${req.headers.host}`);
+        const email = url.searchParams.get('email');
+
+        res.writeHead(200);
+        res.end(email ?? 'brak email');
 
     }else if(req.url === "/about"){
 
