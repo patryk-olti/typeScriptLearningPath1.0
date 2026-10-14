@@ -1,5 +1,5 @@
-import pool from '../../db.js';
-import type { User } from '../types/User.js';
+import pool from '../../db/client.js';
+import type { User } from './user.types.js';
 
 export async function getUsers(): Promise<User[]> {
   const result = await pool.query<User>('SELECT id, name, email, age FROM users');

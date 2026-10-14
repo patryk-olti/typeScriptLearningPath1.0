@@ -1,8 +1,8 @@
 import { createServer } from "node:http";
-import type { User } from './types/User.js';
-import { getUsers, getUserByEMail } from './controller/User.js';
+import type { User } from './modules/users/user.types.js';
+import { getUsers, getUserByEMail } from './modules/users/user.controller.js';
 
-import pool from '../db.js';
+import pool from './db/client.js';
 import { url } from "node:inspector";
 
 let users: User[] = [];
