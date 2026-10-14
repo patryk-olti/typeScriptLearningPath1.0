@@ -4,7 +4,7 @@
     "start": "tsx src/index.ts"
   },
   "devDependencies": {
-    "@types/node": "^26.6.3",
+    "@types/node": "^26.6.5",
     "@types/pg": "^8.23.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.23.15",
@@ -12,6 +12,6 @@
   },
   "dependencies": {
     "dotenv": "^18.0.4",
-    "pg": "^8.23.0"
+    "pg": "^8.23.1"
   }
 }

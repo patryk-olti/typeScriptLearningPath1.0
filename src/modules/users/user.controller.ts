@@ -1,93 +1,66 @@
-import pool from '../../db/client.js';
-import type { User } from './user.types.js';
 
-export async function getUsers(): Promise<User[]> {
-  const result = await pool.query<User>('SELECT id, name, email, age FROM users');
-  return result.rows;
+import type { IncomingMessage, ServerResponse } from 'node:http';
+import * as userService from './user.service.js';
+
+export async function getUsers(
+  req: IncomingMessage,
+  res: ServerResponse
+): Promise<void> {
+  try {
+    const users = await userService.getUsers();
+
+    res.writeHead(200, {
+      'Content-Type': 'application/json; charset=utf-8',
+    });
+
+    res.end(JSON.stringify(users));
+  } catch (error) {
+    console.error(error);
+
+    res.writeHead(500, {
+      'Content-Type': 'application/json; charset=utf-8',
+    });
+
+    res.end(JSON.stringify({
+      message: 'Internal server error',
+    }));
+  }
 }
 
-export async function getUserByEMail(email: string): Promise<User | undefined>{
+export async function getUserByEmail(
+  req: IncomingMessage,
+  res: ServerResponse,
+  email: string
+): Promise<void> {
+  try {
+    const user = await userService.getUserByEmail(email);
 
-  const result = await pool.query<User>(
-    `SELECT id, name, email, age FROM users WHERE email = $1`,
-    [email]
-  );
-  return result.rows[0];
-}
+    if (!user) {
+      res.writeHead(404, {
+        'Content-Type': 'application/json; charset=utf-8',
+      });
 
+      res.end(JSON.stringify({
+        message: 'User not found',
+      }));
 
-/*
-Result z postgre:
-
-Result {
-  command: 'SELECT',
-  rowCount: 1,
-  oid: null,
-  rows: [
-    {
-      id: 1,
-      name: 'Jan Kowalski',
-      email: 'jan.kowalski@example.com',
-      age: 25
+      return;
     }
-  ],
-  fields: [
-    Field {
-      name: 'id',
-      tableID: 16389,
-      columnID: 1,
-      dataTypeID: 23,
-      dataTypeSize: 4,
-      dataTypeModifier: -1,
-      format: 'text'
-    },
-    Field {
-      name: 'name',
-      tableID: 16389,
-      columnID: 2,
-      dataTypeID: 1043,
-      dataTypeSize: -1,
-      dataTypeModifier: 104,
-      format: 'text'
-    },
-    Field {
-      name: 'email',
-      tableID: 16389,
-      columnID: 3,
-      dataTypeID: 1043,
-      dataTypeSize: -1,
-      dataTypeModifier: 154,
-      format: 'text'
-    },
-    Field {
-      name: 'age',
-      tableID: 16389,
-      columnID: 4,
-      dataTypeID: 23,
-      dataTypeSize: 4,
-      dataTypeModifier: -1,
-      format: 'text'
-    }
-  ],
-  _parsers: [
-    [Function: parseInteger],
-    [Function: noParse],
-    [Function: noParse],
-    [Function: parseInteger]
-  ],
-  _types: TypeOverrides {
-    _types: {
-      getTypeParser: [Function: getTypeParser],
-      setTypeParser: [Function: setTypeParser],
-      arrayParser: [Object],
-      builtins: [Object]
-    },
-    text: {},
-    binary: {}
-  },
-  RowCtor: null,
-  rowAsArray: false,
-  _prebuiltEmptyResultObject: { id: null, name: null, email: null, age: null }
-}
 
-*/
+    res.writeHead(200, {
+      'Content-Type': 'application/json; charset=utf-8',
+    });
+
+    res.end(JSON.stringify(user));
+  } catch (error) {
+    console.error(error);
+
+    res.writeHead(500, {
+      'Content-Type': 'application/json; charset=utf-8',
+    });
+
+    res.end(JSON.stringify({
+      message: 'Internal server error',
+    }));
+  }
+}

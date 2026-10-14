@@ -7,7 +7,7 @@ npm install -D typescript tsx @types/node
 npx tsc --init
 
 # run server
-npx tsx src/index.ts
+npx tsx src/server.ts
 
 # postgreSQL init and connect
 npm install pg dotenv
